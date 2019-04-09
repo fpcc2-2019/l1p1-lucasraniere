@@ -1,14 +1,17 @@
-Termos técnicos:
-
-#centralidade/posição
-#dispersão
-#assimetria
-#valores extremos
-#calda (esquerda/direita)
+#Variáves
+    #centralidade/posição (media, mediana, moda, percentil)
+    #dispersão (desvio padrão, amplitude, IQR)
+    #assimetria
+    #valores extremos
+    #calda (esquerda/direita)
 
 
 #amplitude
 
 
 - git pra clonar:
-	https://github.com/fpcc2-2019/dificuldades-lendo-artigos.git
+    https://github.com/fpcc2-2019/dificuldades-lendo-artigos.git
+
+* primeiros passo: distribuição de cada variavel
+gitter**
+histograma**
