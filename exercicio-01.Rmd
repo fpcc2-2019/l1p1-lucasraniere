@@ -26,7 +26,7 @@ output:
 library(tidyverse)
 library(here)
 library(lubridate)
-library(ggbeeswarm)
+#library(ggbeeswarm)
 theme_set(theme_bw())
 ```
     

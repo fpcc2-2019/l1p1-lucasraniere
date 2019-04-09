@@ -1,0 +1,14 @@
+Termos técnicos:
+
+#centralidade/posição
+#dispersão
+#assimetria
+#valores extremos
+#calda (esquerda/direita)
+
+
+#amplitude
+
+
+- git pra clonar:
+	https://github.com/fpcc2-2019/dificuldades-lendo-artigos.git
