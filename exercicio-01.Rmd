@@ -68,9 +68,22 @@ climas %>%
 
 <br>
 
-##Questões:
-###Temperatura:
+#Questões:
+##Temperatura:
 
 <br>
 
-####Onde é mais quente?
+###Onde é mais quente?
+
+<p> Para responder a essa questão, achei melhor analisar não somente a temperaturas máximas de cada cidade (o que seria uma resolução simplista), mas também a frequência de semanas mais ou menos quentes durante todo o período monitorado.</p>
+
+<br>
+
+####Campina Grande:
+```{r}
+climas %>%
+    filter(cidade == "Campina Grande") %>%
+    ggplot(mapping = aes(x = semana, y = tmax)) +
+    geom_col()
+```
+
