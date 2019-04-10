@@ -14,8 +14,8 @@ output:
     2. Quais os meses mais quentes e mais frios?
 
 #### Chuva:
-    1. Quanto chove por semana em JP e CP?
-    2. No geral, onde chove mais?
+    1. No geral, onde chove mais?
+    2. A distribuição é diferente em meses específicos? 
     
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -79,10 +79,6 @@ glimpse(climasp)
 Para responder a essa questão, achei melhor analisar não somente as temperaturas máximas de cada cidade (o que seria uma resolução simplista), mas também a frequência de semanas mais ou menos quentes durante todo o período monitorado.
 
 ```{r}
-#climas %>%
-# ggplot(aes(tmax, colour = cidade)) +  
-# geom_density
-
 ggplot(climasp, aes(tmax, colour = cidade)) +
   geom_density(fill = "blue", alpha = 0.1) +
   labs(x = "Temperatura máxima",
@@ -159,14 +155,56 @@ climajp %>%
     summarise(media_mes_max = median(tmax), media_mes_media = median(tmedia), media_mes_min = median(tmin))
 ```
 
-Os meses mais quentes nas duas cidades são: Janeiro, Fevereiro, e Março. Já os mais frios são: Junho, Julho, e Agosto.
+Os meses mais quentes nas duas cidades são: Dezembro, Janeiro, Fevereiro, e Março. Já os mais frios são: Junho, Julho, Agosto, e Setembro.
 
 ```{r}
 rm("climacg")
 rm("climajp")
 ```
 
+
 ## Chuva
 
-<!-- 1. Quanto chove por semana em JP e CP?
-    2. No geral, onde chove mais? -->
+
+```{r}
+climasp %>%
+  ggplot(aes(chuva, colour = cidade)) +
+  geom_density(fill = "green", alpha = 0.1) +
+  labs(x = "Chuva (mm)",
+       y = "Densidade")
+```
+```{r}
+climasp %>%
+  ggplot(aes(x = cidade, y = chuva)) +
+  geom_boxplot() +
+  coord_flip() +
+  geom_jitter(color = "green", alpha = 0.1) +
+  labs(x = "Cidade",
+       y = "Chuva(mm)")
+```
+```{r}
+climasp %>%
+  filter(cidade == "Campina Grande") %>%
+  group_by(mes) %>%
+  summarise(chuva_media = median(chuva)) %>%
+  ggplot(aes(x = mes, y = chuva_media)) +
+  geom_col(fill = "green", alpha = 0.5)
+```
+```{r}
+climasp %>%
+  filter(cidade == "João Pessoa") %>%
+  group_by(mes) %>%
+  summarise(chuva_media = median(chuva)) %>%
+  ggplot(aes(x = mes, y = chuva_media)) +
+  geom_col(fill = "green", alpha = 0.5)
+```
+
+#### No geral, onde chove mais?
+
+Os gráficos de densidade, variação e da média de chuva dos meses dizem que chova mais em João Pessoa. Em Campina Grande há menos constância nos períodos de chuva, ocorrendo alguns picos em determinados meses. Mas mesmo assim, os períodos de chuva de João Pessoa são mais consistentes, e com maior volume de chuva.
+
+#### A distribuição é diferente em meses específicos?
+
+Os gráficos de média de chuva em relação aos meses mostram uma certa simetria. O ano começa e termina com baixo volume de chuva, ao se aproximar da metade do ano o volume vai aumentando, e encontra seu ápice em Junho, onde começa o inverno.
+<!-- 1.No geral, onde chove mais? 
+     2. A distribuição é diferente em meses específicos? -->
