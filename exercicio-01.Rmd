@@ -5,34 +5,28 @@ output:
     df_print: paged
 ---
 
-###Lucas Raniére J. Santos
+### Lucas Raniére J. Santos
 
-###Perguntas a serem respondidas:
+### Perguntas a serem respondidas:
 
-<br>
-
-####Temperatura:
+#### Temperatura:
     1. Onde é mais quente?
     2. Quais os meses mais quentes e mais frios?
 
-####Chuva:
+#### Chuva:
     1. Quanto chove por semana em JP e CP?
     2. No geral, onde chove mais?
     
-<br>
-
-####Bibliotecas utilizadas no exercício:
-```{r message=FALSE, warning=FALSE}
+```{r echo = FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(here)
 library(lubridate)
-#library(ggbeeswarm)
+library(ggbeeswarm)
 theme_set(theme_bw())
 ```
     
-<br>
 
-###Observando os dados:
+### Observando os dados:
 
 
 ```{r read}
@@ -43,47 +37,67 @@ climas = read_csv(here::here("data/clima_cg_jp-semanal.csv"),
 glimpse(climas)
 ```
 
-<p>Como pode ser visto acima, nossa base é formada por 2.748 instâncias de dados com 8 variáveis. As variáveis são: cidade (nesse caso Campina Grande e João Pessoa), semana, tmedia (temperatura média), tmax (temperatura máxima), tmin (temperatura máxima), chuva (pluviosidade), mes, e ano.<p>
+Como pode ser visto acima, nossa base é formada por 2.748 instâncias de dados com 8 variáveis. As variáveis são: cidade (nesse caso Campina Grande e João Pessoa), semana, tmedia (temperatura média), tmax (temperatura máxima), tmin (temperatura máxima), chuva (pluviosidade), mes, e ano.
 
-<br>
-
-####Sumário dos dados de Campina Grande:
+#### Sumário dos dados de Campina Grande:
 ```{r}
 climas %>%
     filter(cidade == "Campina Grande") %>%
     summary()
 ```
-####Sumário dos dados de João Pessoa:
+#### Sumário dos dados de João Pessoa:
 ```{r}
 climas %>%
     filter(cidade == "João Pessoa") %>%
     summary()
 ```
 
-<br>
+Foram exibidas novas informações sobre a base de dados. Temos 1.224 instâncias de dados sobre Campina Grande, sendo utilizados dados dos anos de 1992 até 2019. Já sobre os dados de João Pessoa, temos 1.524 instâncias, tendo dados de 1987 até 2019.
 
-<p>Foram exibidas novas informações sobre a base de dados. Temos 1.224 instâncias de dados sobre Campina Grande, sendo utilizados dados dos anos de 1992 até 2019. Já sobre os dados de João Pessoa, temos 1.524 instâncias, tendo dados de 1987 até 2019.</p>
+A partir dos sumários dos dados de cada cidade, é possível observar também as maiores e menores temperaturas registradas em cada cidade durante todo o período monitorado. A maior temperatura observada em Campina grande foi 34,6° C, enquanto a menor foi 15,3° C. Já em João Pessoa temos 33,7° como maior temperatura, e 15,6° como menor temperatura registrada.
 
-<p>A partir dos sumários dos dados de cada cidade, é possível observar também as maiores e menores temperaturas registradas em cada cidade durante todo o período monitorado. A maior temperatura observada em Campina grande foi 34,6° C, enquanto a menor foi 15,3° C. Já em João Pessoa temos 33,7° como maior temperatura, e 15,6° como menor temperatura registrada.</p> 
+# Preprocessamento dos dados:
 
-<br>
+Como há uma discrepância na quantidade de semanas monitoradas entre as duas cidades, para que não afete a visualização dos dados (principalmente na visualização de densidade) irei usar apenas as semanas onde existem os dados das duas cidades.
 
-#Questões:
-##Temperatura:
-
-<br>
-
-###Onde é mais quente?
-
-<p> Para responder a essa questão, achei melhor analisar não somente a temperaturas máximas de cada cidade (o que seria uma resolução simplista), mas também a frequência de semanas mais ou menos quentes durante todo o período monitorado.</p>
-
-<br>
-
-####Campina Grande:
 ```{r}
-climas %>%
-    filter(cidade == "Campina Grande") %>%
-    ggplot(mapping = aes(x = semana, y = tmax)) +
-    geom_col()
+semanas = climas %>% count(semana) %>% filter(n == 2) %>% pull(semana)
+
+
+climasp = climas %>% filter(semana %in% semanas)
+
+glimpse(climasp)
+```
+
+# Questões:
+## Temperatura:
+
+### Onde é mais quente?
+
+Para responder a essa questão, achei melhor analisar não somente as temperaturas máximas de cada cidade (o que seria uma resolução simplista), mas também a frequência de semanas mais ou menos quentes durante todo o período monitorado.
+
+```{r}
+#climas %>%
+# ggplot(aes(tmax, colour = cidade)) +  
+# geom_density
+
+ggplot(climasp, aes(tmax, colour = cidade)) +
+  geom_density(fill = "blue", alpha = 0.1) +
+  labs(x = "Temperatura máxima",
+       y = "Densidade")
+```
+
+```{r}
+ggplot(climasp, aes(tmedia, colour = cidade)) +
+  geom_density(fill = "blue", alpha = 0.1) +
+  labs(x = "Temperatura média",
+       y = "Densidade")
+```
+
+```{r}
+ggplot(climasp, aes(tmin, colour = cidade)) +
+  geom_density(fill = "blue", alpha = 0.1) +
+  labs(x = "Temperatura mínima",
+       y = "Densidade")
 ```
 
