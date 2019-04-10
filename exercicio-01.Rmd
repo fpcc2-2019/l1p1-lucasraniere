@@ -66,6 +66,8 @@ semanas = climas %>% count(semana) %>% filter(n == 2) %>% pull(semana)
 
 climasp = climas %>% filter(semana %in% semanas)
 
+rm(climas) #apaga o dataframe que não será mais usado
+
 glimpse(climasp)
 ```
 
@@ -88,11 +90,30 @@ ggplot(climasp, aes(tmax, colour = cidade)) +
 ```
 
 ```{r}
+ggplot(climasp, aes(x = cidade, y = tmax)) +
+    geom_boxplot() +
+    geom_jitter(color = "red", alpha = 0.2) +
+    coord_flip() +
+    labs(x = "Cidade",
+       y = "Temperatura máxima")
+```
+
+```{r}
 ggplot(climasp, aes(tmedia, colour = cidade)) +
   geom_density(fill = "blue", alpha = 0.1) +
   labs(x = "Temperatura média",
        y = "Densidade")
 ```
+
+```{r}
+ggplot(climasp, aes(x = cidade, y = tmedia)) +
+    geom_boxplot() +
+    geom_jitter(color = "red", alpha = 0.2) +
+    coord_flip() +
+    labs(x = "Cidade",
+       y = "Temperatura média")
+```
+
 
 ```{r}
 ggplot(climasp, aes(tmin, colour = cidade)) +
@@ -101,3 +122,51 @@ ggplot(climasp, aes(tmin, colour = cidade)) +
        y = "Densidade")
 ```
 
+```{r}
+ggplot(climasp, aes(x = cidade, y = tmin)) +
+    geom_boxplot() +
+    geom_jitter(color = "red", alpha = 0.2) +
+    coord_flip() +
+    labs(x = "Cidade",
+       y = "Temperatura mínima")
+```
+
+Observando os gráficos acima... Campina Grande tem uma maior amplitude térmica, das duas é que teve menor temperatura registrada. João Pessoa tem uma maior concentração de semanas quente, e as maiores temperaturas....
+
+### Quais o meses mais quente e mais frios?
+
+```{r}
+climacg = climasp %>%
+    filter(cidade == "Campina Grande")
+
+climajp = climasp %>%
+    filter(cidade == "João Pessoa")
+```
+
+```{r}
+climacg %>%
+    group_by(mes) %>%
+    summarise(media_mes_max = median(tmax), media_mes_media = median(tmedia), media_mes_min = median(tmin))
+#    ggplot(aes(x = mes, y = media_mes_media)) +
+#    geom_col(fill = "blue", alpha = 0.6) +
+#    labs(y = "Média das temperatudas do mês",
+#       x = "Mes")
+```
+
+```{r}
+climajp %>%
+    group_by(mes) %>%
+    summarise(media_mes_max = median(tmax), media_mes_media = median(tmedia), media_mes_min = median(tmin))
+```
+
+Os meses mais quentes nas duas cidades são: Janeiro, Fevereiro, e Março. Já os mais frios são: Junho, Julho, e Agosto.
+
+```{r}
+rm("climacg")
+rm("climajp")
+```
+
+## Chuva
+
+<!-- 1. Quanto chove por semana em JP e CP?
+    2. No geral, onde chove mais? -->
